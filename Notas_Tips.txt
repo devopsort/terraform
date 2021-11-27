@@ -1,0 +1,16 @@
+aws eks --region us-east-1 update-kubeconfig --name eks-cluster-prod
+ 
+https://releases.hashicorp.com/terraform/1.0.11/terraform_1.0.11_linux_amd64.zip
+
+
+#Para instalr el dashboard:
+kubectl apply -f https://gist.githubusercontent.com/mauricioamendola/abe42453184c42a401a1d170824deab0/raw/eabc8334575df8aa3452462e3f497128f59d98fc/k8s-dash-sa-rbac
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')
+kubectl proxy
+Entrar:
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#!/login
+
+
+Para instalar ArgoCD:
+https://argo-cd.readthedocs.io/en/stable/getting_started/
