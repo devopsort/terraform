@@ -10,6 +10,11 @@ variable "terraform-key" {
     sensitive = true
 }
 
+variable "Ec2-ssh-key" {
+    description = "SSH Key"
+    type = string
+    sensitive = true
+}
 
 variable "JenkinsIP" {
     description = "Jenkins private IP"
@@ -55,3 +60,8 @@ variable "ECR_Repos" {
   description = "Enumera los repositorios a crear para cada ms"
 }
 
+# Variables ms-product-repo
+variable "argo-ms-product-repo" {
+  description = "URL repo Argo ms-product"
+  type        = string
+}

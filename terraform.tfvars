@@ -2,7 +2,7 @@
 # Variables Generales
 aws_region = "us-east-1"
 terraform-key = "keyssh-EC2-prueba"
-
+Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 JenkinsIP = "10.0.200.10"
 Jenkins_instance_type = "t2.micro"
@@ -91,6 +91,7 @@ Eks_Namespace 		= "default"
 Eks_instance_types	= ["t3.medium"]
 
 EKS_Cluster ={
+    /*
     Eks_Cl_Dev = {
       name = "eks-cluster-dev"
       node_group_name = "node_group-obl-dev"
@@ -102,7 +103,7 @@ EKS_Cluster ={
         Name = "Cluster dev"
         terraform   = "true"
       }
-    },
+    }, */
     Eks_Cl_Test = {
       name = "eks-cluster-test"
       node_group_name = "node_group-obl-test"
@@ -114,7 +115,7 @@ EKS_Cluster ={
         Name = "Cluster Test"
         terraform   = "true"
       }      
-    },
+    }/* ,
     Eks_Cl_Prod = {
       name = "eks-cluster-prod"
       node_group_name = "node_group-obl-prod"
@@ -125,8 +126,8 @@ EKS_Cluster ={
       tags = {
         Name = "Cluster Prod"
         terraform   = "true"
-      }      
-    }
+      }  
+    } */
   }
 
 
@@ -144,3 +145,6 @@ ECR_Repos = {
       name = "shipping-service"
     }
 }
+
+
+argo-ms-product-repo = "https://github.com/devopsort/argocd_products-service-example.git"

@@ -1,41 +1,152 @@
-/*
-data "aws_subnet_ids" "test_subnet_ids" {
-  vpc_id = "vpc-obligatorio"
-
-  depends_on = [
-    aws_subnet.vpc-subnets-obl,
-  ]
-}
-
-
-output subnet_infra_id {
-  value = values(aws_subnet.vpc-subnets-obl)[3].id
-}
-
-
-
-resource "aws_network_interface" "eth_jenkins" {
-  subnet_id   = values(aws_subnet.vpc-subnets-obl)[3].id
-  private_ips = [var.JenkinsIP]
-
-  tags = {
-    Name = "eth_jenkins"
-  }
-}
-*/
-
 # Create EC2 Instance
 resource "aws_instance" "JenkinsDockerTF" {
 	ami = "ami-02e136e904f3da870"
 	instance_type = var.Jenkins_instance_type
 	key_name = var.terraform-key
 	subnet_id   = values(aws_subnet.vpc-subnets-obl)[8].id
+  vpc_security_group_ids = [aws_security_group.sg-obl-infra.id]  
+  private_ip = var.JenkinsIP
 
-//    network_interface {
-//      network_interface_id = aws_network_interface.eth_jenkins.id
-//      device_index         = 0
-//    }
 
+  #Bloque de conexion SSH para poder conectarse por SSH y ejecutar el provisioner
+  connection {
+    type = "ssh"
+    host = self.public_ip # Understand what is "self"
+    user = "ec2-user"
+    password = ""
+    private_key = file(var.Ec2-ssh-key)
+  }  
+
+ # Copiamos el script para inicializar la base de datos
+  provisioner "file" {
+    source      = "${var.Ec2-ssh-key}"
+    destination = "/tmp/Ec2-ssh-key.pem"
+  }
+  provisioner "file" {
+    source      = "aws/config"
+    destination = "/tmp/config"
+  }
+  provisioner "file" {
+    source      = "aws/credentials"
+    destination = "/tmp/credentials"
+  }
+  provisioner "file" {
+    source      = "aws/dash_account.yaml"
+    destination = "/tmp/dash_account.yaml"
+  }
+
+  # Ejecutamos los comandos para instalar las tools
+  provisioner "remote-exec" {
+    inline = [
+      "sleep 60",
+      "curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl",
+      "chmod +x ./kubectl",
+      "mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin",
+      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc",
+      "kubectl version --short --client",
+      "mkdir ~/.aws",
+      "mv /tmp/config ~/.aws",
+      "mv /tmp/credentials ~/.aws",
+      "aws ec2 describe-instances",
+      "sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64", #ArgoCDInstall
+      "sudo chmod +x /usr/local/bin/argocd",
+      "sudo yum install -y jq",
+      "sleep 30",
+      "sudo docker ps",
+      "sudo docker cp /tmp/Ec2-ssh-key.pem Jenkins:/tmp/Ec2-ssh-key.pem",
+      "sudo docker exec -uroot Jenkins  chmod 400 /tmp/Ec2-ssh-key.pem"
+    ]
+  }
+
+/*
+  # Ejecutamos los comandos para instalar los deployment en cada cluster
+  provisioner "remote-exec" {
+    inline = [
+      "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-dev",
+      "kubectl create namespace argocd",
+      "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
+      "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
+      "kubectl create namespace kubernetes-dashboard",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml",
+      "echo \"TOKEN DASHBOARD\" >> dev.txt",
+      "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> dev.txt",
+      "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
+      "sleep 120",
+      "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
+      "echo \"ARGO SERVER\" ",
+      "echo $ARGOCD_SERVER",
+      "export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d`",
+      "echo \"ARGO PWD\" ",
+      "echo $ARGO_PWD",
+      "argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure",
+      "echo \"ARGOCD_SERVER\" >> dev.txt",
+      "echo $ARGOCD_SERVER >> dev.txt",
+      "echo \"ARGO_PWD\" >> dev.txt",
+      "echo $ARGO_PWD >> dev.txt",
+      "cat dev.txt"
+    ]
+  }
+*/
+
+  # Ejecutamos los comandos para instalar los deployment en cada cluster
+  provisioner "remote-exec" {
+    inline = [
+      "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-test",
+      "kubectl create namespace argocd",
+      "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
+      "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
+      "kubectl create namespace kubernetes-dashboard",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml",
+      "echo \"TOKEN DASHBOARD\" >> test.txt",
+      "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> test.txt",
+      "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
+      "sleep 120",
+      "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
+      "echo \"ARGO SERVER\" ",
+      "echo $ARGOCD_SERVER",
+      "export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d`",
+      "echo \"ARGO PWD\" ",
+      "echo $ARGO_PWD",
+      "argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure",
+      "echo \"ARGOCD_SERVER\" >> test.txt",
+      "echo $ARGOCD_SERVER >> detestv.txt",
+      "echo \"ARGO_PWD\" >> test.txt",
+      "echo $ARGO_PWD >> test.txt",
+      "cat test.txt",
+      "argocd app create ms-product --repo ${var.argo-ms-product-repo} --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app sync ms-product"
+    ]
+  }
+
+  /*
+  # Ejecutamos los comandos para instalar los deployment en cada cluster
+  provisioner "remote-exec" {
+    inline = [
+      "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-prod",
+      "kubectl create namespace argocd",
+      "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
+      "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
+      "kubectl create namespace kubernetes-dashboard",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml",
+      "echo \"TOKEN DASHBOARD\" >> prod.txt",
+      "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> prod.txt",
+      "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
+      "sleep 120",
+      "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
+      "echo \"ARGO SERVER\" ",
+      "echo $ARGOCD_SERVER",
+      "export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d`",
+      "echo \"ARGO PWD\" ",
+      "echo $ARGO_PWD",
+      "argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure",
+      "echo \"ARGOCD_SERVER\" >> prod.txt",
+      "echo $ARGOCD_SERVER >> prod.txt",
+      "echo \"ARGO_PWD\" >> prod.txt",
+      "echo $ARGO_PWD >> prod.txt",
+      "cat test.txt"
+    ]
+  }
+  */
     user_data = <<-EOF
               #!/bin/bash
               sudo yum install -y yum-utils
@@ -43,13 +154,14 @@ resource "aws_instance" "JenkinsDockerTF" {
               sudo yum install -y git
               sudo systemctl start docker
               sudo systemctl enable docker
-              sudo mkdir /var/jenkins_home
+              sudo mkdir /home/jenkins_home
+              sudo chmod -R 777 /home/jenkins_home
               sudo mkdir var/registry
-              sudo docker run --name Jenkins --add-host=JenkinsDockerTF:${var.JenkinsIP} -d --restart unless-stopped -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
-              sudo docker run -d -v /var/registry:/var/lib/registry -p 5000:5000 --restart always --name registry registry:2
+              sudo docker run --name Jenkins --add-host=JenkinsDockerTF:${var.JenkinsIP} -d --restart unless-stopped -p 8080:8080 -p 50000:50000 -v /home/jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
             EOF   
 	tags = {
 		Name = "JenkinsDockerTF"	
-		Batch = "Docker"
+		Batch = "Docker, kubectl, argocd"
 	}
+  depends_on = [aws_eks_cluster.eks-cluster-obl,aws_eks_node_group.node_group-obl-dev]
 }
