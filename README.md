@@ -204,7 +204,8 @@ subnet_data = {
     - En las subnet de los ambientes se les permiten todos los puertos desde dentro de la infraestructura, desde fuera por internet solo 80 y 443, para publicar los         servicios.
 
 
-[IMAGENES CODIGO SG]
+![Github logo](terraform/Images/SG DEVELOPER.png)
+
 
 
 - **Cada ambiente consta de un cluster de EKS**:
@@ -431,7 +432,10 @@ resource "aws_instance" "JenkinsDockerTF" {
   depends_on = [aws_eks_cluster.eks-cluster-obl,aws_eks_node_group.node_group-obl-dev]
 }
 ```
-  
+
+- Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
+
+
   
   
 
