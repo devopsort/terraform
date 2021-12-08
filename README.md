@@ -481,7 +481,7 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 **Repositorio donde especificamos el archivo Jenkinsfile-Obligatorio:** 
 
-url: https://github.com/devopsort/Pipelines.git
+[Repo Jenkins](https://github.com/devopsort/Pipelines.git)
 
 
 
