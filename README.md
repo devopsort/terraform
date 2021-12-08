@@ -479,6 +479,9 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 ![Jenkins_9](Images/Screenshot_9.png)
 
+**Repositorio donde especificamos el archivo Jenkinsfile-Obligatorio:** 
+
+url: https://github.com/devopsort/Pipelines.git
 
 
 
