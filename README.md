@@ -437,7 +437,7 @@ resource "aws_instance" "JenkinsDockerTF" {
 
 
 
-Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el **initialAdminPassword** que solicita el Jenkins para inicializarlo, ver imagen:
+Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
 ![Jenkins_0](Images/Screenshot_0.png)
 
@@ -446,7 +446,7 @@ Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proce
 ![Jenkins_1](Images/Screenshot_1.png)
 
 
-Luego procedemos a la instalacion de las dependencias iniciales que nos especifica el Jenkins por defecto y a la configuración del usuario **Admininistrador** que se va a usar, ver imagen:
+Luego procedemos a la instalacion de las dependencias iniciales que nos especifica el Jenkins por defecto y a la configuración del usuario `Admininistrador` que se va a usar, ver imagen:
 
 ![Jenkins_2](Images/Screenshot_2.png)
 ![Jenkins_3](Images/Screenshot_3.png)
@@ -467,7 +467,7 @@ Además guardamos en un archivo variable el repo y la rama de la cual se realiza
 
 ![Jenkins_6](Images/Screenshot_6.png)
 
-Jobs **OBLIGATORIO**
+Especificacion del jobs **OBLIGATORIO**:
 
 ![Jenkins_8](Images/Screenshot_8.png)
 
@@ -481,7 +481,7 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 **Repositorio donde especificamos el archivo Jenkinsfile-Obligatorio:** 
 
-url: https://github.com/devopsort/Pipelines.git
+`url:` https://github.com/devopsort/Pipelines.git
 
 
 
