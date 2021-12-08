@@ -182,7 +182,8 @@ subnet_data = {
   - eks-cluster-prod
     
     
-Los mismos estan parametrizados en el archivo de variables.tfvars, asi como los recursos a cada uno.
+Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.[.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) [ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
+
 
 
 
@@ -202,15 +203,7 @@ resource "aws_eks_cluster" "eks-cluster-obl" {
       endpoint_private_access   = true
       endpoint_public_access    = false
     }
-    name    = each.value.name
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
-  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
-  depends_on = [
-    aws_iam_role_policy_attachment.pol-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.pol-AmazonEKSVPCResourceController,
-  ]
-}
+    ....
 ```
 
 ```terraform
@@ -240,91 +233,10 @@ EKS_Cluster ={
 - Una Instancia EC2 "JenkinsDockerTF" con el SecurityGroup **"sg-obl-infra"** y la SubNet **"Subnet Infra"**
   - Esta instancia cumplira la funcion de administrar Jenkins, kubectl, aws_cli y argo_cli.
   - Se le instalaran todas las herramientas necesarias mediante remote-exec
- 
+  
+ El Codigo puede encontrarse en: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
   
  
- ```terraform
-# Create EC2 Instance  -Jenkins.tf
-resource "aws_instance" "JenkinsDockerTF" {
-	ami = "ami-02e136e904f3da870"
-	instance_type = var.Jenkins_instance_type
-	key_name = var.terraform-key
-	subnet_id   = values(aws_subnet.vpc-subnets-obl)[8].id
-  vpc_security_group_ids = [aws_security_group.sg-obl-infra.id]  
-  private_ip = var.JenkinsIP
-
-
-  #Bloque de conexion SSH para poder conectarse por SSH y ejecutar el provisioner
-  connection {
-    type = "ssh"
-    host = self.public_ip # Understand what is "self"
-    user = "ec2-user"
-    password = ""
-    private_key = file(var.Ec2-ssh-key)
-  }  
-
- # Copiamos el script para inicializar la base de datos
-  provisioner "file" {
-    source      = "${var.Ec2-ssh-key}"
-    destination = "/tmp/Ec2-ssh-key.pem"
-  }
-  provisioner "file" {
-    source      = "aws/config"
-    destination = "/tmp/config"
-  }
-  provisioner "file" {
-    source      = "aws/credentials"
-    destination = "/tmp/credentials"
-  }
-  provisioner "file" {
-    source      = "aws/dash_account.yaml"
-    destination = "/tmp/dash_account.yaml"
-  }
-
-  # Ejecutamos los comandos para instalar las tools
-  provisioner "remote-exec" {
-    inline = [
-      "sleep 60",
-      "curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl",
-      "chmod +x ./kubectl",
-      "mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin",
-      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc",
-      "kubectl version --short --client",
-      "mkdir /root/.aws",
-      "cp /tmp/config /root/.aws/",
-      "cp /tmp/credentials /root/.aws/",
-      "mkdir ~/.aws",
-      "mv /tmp/config ~/.aws",
-      "mv /tmp/credentials ~/.aws",
-      "aws ec2 describe-instances",
-      "sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64", #ArgoCDInstall
-      "sudo chmod +x /usr/local/bin/argocd",
-      "sudo yum install -y jq",
-      "sleep 30",
-      "sudo docker ps",
-      "sudo docker cp /tmp/Ec2-ssh-key.pem Jenkins:/tmp/Ec2-ssh-key.pem",
-      "sudo docker exec -uroot Jenkins  chmod 400 /tmp/Ec2-ssh-key.pem"
-    ]
-  }
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum install -y yum-utils
-              sudo yum install -y docker
-              sudo yum install -y git
-              sudo systemctl start docker
-              sudo systemctl enable docker
-              sudo mkdir /home/jenkins_home
-              sudo chmod -R 777 /home/jenkins_home
-              sudo mkdir var/registry
-              sudo docker run --name Jenkins --add-host=JenkinsDockerTF:${var.JenkinsIP} -d --restart unless-stopped -p 8080:8080 -p 50000:50000 -v /home/jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
-            EOF   
-	tags = {
-		Name = "JenkinsDockerTF"	
-		Batch = "Docker, kubectl, argocd"
-	}
-  depends_on = [aws_eks_cluster.eks-cluster-obl,aws_eks_node_group.node_group-obl-dev]
-}
-```
 
 - Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
 
