@@ -184,53 +184,13 @@ subnet_data = {
     
 Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.
 
-tfvars:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
+  **tfvars**:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
 
-ekscluster:[ ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
-
-
+  **ekscluster**:[ ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
 
 
-```terraform
-#Cluster EKS Developer -eksCluster.tf
-#--------------------------------------------------------------------------------
-resource "aws_eks_cluster" "eks-cluster-obl" {
-  role_arn = aws_iam_role.eks-cluster-role.arn
 
-  for_each = var.EKS_Cluster
-  //count = length(var.EKS_Cluster)
-    vpc_config {
-      //subnet_ids      = [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id]
-      subnet_ids = each.value.name == "eks-cluster-prod"   ? [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id] : (each.value.name == "eks-cluster-test"   ? [values(aws_subnet.vpc-subnets-obl)[2].id, values(aws_subnet.vpc-subnets-obl)[3].id] : [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id] )
-      security_group_ids = each.value.name == "eks-cluster-prod"   ? [aws_security_group.sg-obl-eks-prod.id] : (each.value.name == "eks-cluster-test"   ? [aws_security_group.sg-obl-eks-test.id] : [aws_security_group.sg-obl-eks-dev.id] )
-      //security_group_ids = [aws_security_group.sg-obl-eks-dev.id]
-      endpoint_private_access   = true
-      endpoint_public_access    = false
-    }
-    ....
-```
-
-```terraform
-# Variables EKS Cluster -terraform.tfvars
-Eks_Namespace 		= "default"
-Eks_instance_types	= ["t3.medium"]
-
-EKS_Cluster ={
-    
-    Eks_Cl_Dev = {
-      name = "eks-cluster-dev"
-      node_group_name = "node_group-obl-dev"
-      desired_size = 2
-      max_size     = 2
-      min_size     = 2
-      //subnet_ids = [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id]
-      tags = {
-        Name = "Cluster dev"
-        terraform   = "true"
-      }
-      ....
-  ```
-
+![EKS CLUSTER](Images/EKS.jpeg)
 
 
 
@@ -243,6 +203,10 @@ EKS_Cluster ={
  
 
 - Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
+
+![ECR](Images/ecr.jpeg)
+
+**El codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
 
 
 # CI/CD:computer:
