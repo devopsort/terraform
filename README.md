@@ -47,20 +47,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
-    /*
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = ">= 1.9.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-    }
-    */
+   
   }
 
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-devops-obligatorio3"
+    bucket = "terraform-devops-obligatorio"
     key    = "terraform/terraform.tfstate"
     region = "us-east-1"
   }
@@ -173,31 +165,7 @@ subnet_data = {
         terraform   = "true"
       }
     },
-    S2-Sub_test-a = {
-      availability_zone = "us-east-1a"
-      cidr_block = "10.0.20.0/24"
-      tags = {
-        Name = "Subnet test a"
-        terraform   = "true"
-      }      
-    },
-    S4-Sub_prod_a = {
-      availability_zone = "us-east-1a"
-      cidr_block = "10.0.100.0/24"
-      tags = {
-        Name = "Subnet prod a"
-        terraform   = "true"
-      }      
-    },
-    S8-Sub_infra = {
-      availability_zone = "us-east-1f"
-      cidr_block = "10.0.200.0/24"
-      tags = {
-        Name = "Subnet Infra"
-        terraform   = "true"
-      }      
-    }    
-  }
+    ....
 ```
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
@@ -243,52 +211,6 @@ resource "aws_eks_cluster" "eks-cluster-obl" {
     aws_iam_role_policy_attachment.pol-AmazonEKSVPCResourceController,
   ]
 }
-
-/*
-output "endpoint" {
-  value = [aws_eks_cluster.eks-cluster-obl.endpoint]
-}
-
-
-output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.eks-cluster-obl.certificate_authority[0].data
-}
-
-
-
-
-#Node Groups
-resource "aws_eks_node_group" "node_group-obl-dev" {
-  for_each = var.EKS_Cluster
-  cluster_name    = aws_eks_cluster.eks-cluster-obl[each.key].name
-  node_group_name = each.value.node_group_name
-  node_role_arn   = aws_iam_role.eks-node-group-role.arn
-//      subnet_ids      = [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id]
-    subnet_ids = each.value.name == "eks-cluster-prod"   ? [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id] : (each.value.name == "eks-cluster-test"   ? [values(aws_subnet.vpc-subnets-obl)[2].id, values(aws_subnet.vpc-subnets-obl)[3].id] : [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id] )
-    //remote_access_security_group_id = each.value.name == "eks-cluster-prod"   ? [aws_security_group.sg-obl-eks-prod.id] : (each.value.name == "eks-cluster-test"   ? [aws_security_group.sg-obl-eks-test.id] : [aws_security_group.sg-obl-eks-dev.id] )
-  
-
-  scaling_config {
-    desired_size = each.value.desired_size
-    max_size     = each.value.max_size
-    min_size     = each.value.min_size
-  }
-  
-  instance_types = var.Eks_instance_types
-
-  update_config {
-    max_unavailable = 2
-  }
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
-  depends_on = [
-    aws_eks_cluster.eks-cluster-obl,
-    aws_iam_role_policy_attachment.pol-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.pol-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.pol-AmazonEC2ContainerRegistryReadOnly,
-  ]
-}
 ```
 
 ```terraform
@@ -309,37 +231,8 @@ EKS_Cluster ={
         Name = "Cluster dev"
         terraform   = "true"
       }
-    }, 
-    Eks_Cl_Test = {
-      name = "eks-cluster-test"
-      node_group_name = "node_group-obl-test"
-      desired_size = 2
-      max_size     = 2
-      min_size     = 2
-      //subnet_ids = [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id]
-      tags = {
-        Name = "Cluster Test"
-        terraform   = "true"
-      }      
-    } ,
-    Eks_Cl_Prod = {
-      name = "eks-cluster-prod"
-      node_group_name = "node_group-obl-prod"
-      desired_size = 4
-      max_size     = 8
-      min_size     = 2
-      //subnet_ids = [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id]
-      tags = {
-        Name = "Cluster Prod"
-        terraform   = "true"
-      }  
-    } 
-  }
+      ....
   ```
-
-
-
-
 
 
 
@@ -436,6 +329,7 @@ resource "aws_instance" "JenkinsDockerTF" {
 - Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
 
 
+# CI/CD:computer:
 
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
@@ -481,7 +375,11 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 **Repositorio donde especificamos el archivo Jenkinsfile-Obligatorio:** 
 
+<<<<<<< HEAD
 `url:` https://github.com/devopsort/Pipelines.git
+=======
+[Repo Jenkins](https://github.com/devopsort/Pipelines.git)
+>>>>>>> 7ad842f58466a802d1cf1dbadc1640e28e7f14d5
 
 
 
