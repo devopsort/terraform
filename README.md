@@ -165,31 +165,7 @@ subnet_data = {
         terraform   = "true"
       }
     },
-    S2-Sub_test-a = {
-      availability_zone = "us-east-1a"
-      cidr_block = "10.0.20.0/24"
-      tags = {
-        Name = "Subnet test a"
-        terraform   = "true"
-      }      
-    },
-    S4-Sub_prod_a = {
-      availability_zone = "us-east-1a"
-      cidr_block = "10.0.100.0/24"
-      tags = {
-        Name = "Subnet prod a"
-        terraform   = "true"
-      }      
-    },
-    S8-Sub_infra = {
-      availability_zone = "us-east-1f"
-      cidr_block = "10.0.200.0/24"
-      tags = {
-        Name = "Subnet Infra"
-        terraform   = "true"
-      }      
-    }    
-  }
+    ....
 ```
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
@@ -255,37 +231,8 @@ EKS_Cluster ={
         Name = "Cluster dev"
         terraform   = "true"
       }
-    }, 
-    Eks_Cl_Test = {
-      name = "eks-cluster-test"
-      node_group_name = "node_group-obl-test"
-      desired_size = 2
-      max_size     = 2
-      min_size     = 2
-      //subnet_ids = [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id]
-      tags = {
-        Name = "Cluster Test"
-        terraform   = "true"
-      }      
-    } ,
-    Eks_Cl_Prod = {
-      name = "eks-cluster-prod"
-      node_group_name = "node_group-obl-prod"
-      desired_size = 4
-      max_size     = 8
-      min_size     = 2
-      //subnet_ids = [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id]
-      tags = {
-        Name = "Cluster Prod"
-        terraform   = "true"
-      }  
-    } 
-  }
+      ....
   ```
-
-
-
-
 
 
 
