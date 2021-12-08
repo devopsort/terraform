@@ -182,7 +182,11 @@ subnet_data = {
   - eks-cluster-prod
     
     
-Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.[.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) [ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
+Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.
+
+tfvars:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
+
+ekscluster:[ ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
 
 
 
