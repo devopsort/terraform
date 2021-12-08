@@ -436,6 +436,7 @@ resource "aws_instance" "JenkinsDockerTF" {
 - Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
 
 
+# CI/CD
 
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el **initialAdminPassword** que solicita el Jenkins para inicializarlo, ver imagen:
 
