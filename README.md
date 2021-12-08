@@ -436,35 +436,48 @@ resource "aws_instance" "JenkinsDockerTF" {
 - Un conjunto de repositorios ECR para almacenar las imagenes buildeadas de cada microservicio
 
 
-  
-  
+
+Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el **initialAdminPassword** que solicita el Jenkins para inicializarlo, ver imagen:
+
+![Jenkins_0](Images/Screenshot_0.png)
+
+ Especificamos la clave mostrada anteriormente en la nuestra interfaz Jenkins, ver imagen:
+
+![Jenkins_1](Images/Screenshot_1.png)
 
 
+Luego procedemos a la instalacion de las dependencias iniciales que nos especifica el Jenkins por defecto y a la configuración del usuario **Admininistrador** que se va a usar, ver imagen:
 
+![Jenkins_2](Images/Screenshot_2.png)
+![Jenkins_3](Images/Screenshot_3.png)
 
+Y como bien se muestra en la siguiente imagen, se puede mostrar que la instalación termino exitosamente y que esta operativo y listo para trabajar.
 
+![Jenkins_4](Images/Screenshot_4.png)
 
+Para el despliegue y la compilación del los microservicios configuramos las diferentes tareas para gestionar el trabajo.
+En el siguiente Job capturamos el evento cuando se realice el push por parte de desarrollador en las ramas del git.
+Primeramente especificamos el repositorio del microservicio:
 
+**Nota:** Se toma como ejemplo el repositorio del microservicio **products**.
 
+![Jenkins_5](Images/Screenshot_5.png)
 
+Además guardamos en un archivo variable el repo y la rama de la cual se realiza el commit y llamamos a otro Jobs que va ser el encargado de hacer el armado de la imagen, el push para el ECR de AWS y el despliegue en los K8S de los diferentes microservicios.
 
+![Jenkins_6](Images/Screenshot_6.png)
 
+Jobs **OBLIGATORIO**
 
+![Jenkins_8](Images/Screenshot_8.png)
 
+Al final de la configuración las tareas quedan de la siguiente manera:
 
+![Jenkins_7](Images/Screenshot_7.png)
 
+Por ultimo se debe especificar en el las configuraciones del git la url del jenkins para asociarlo, ver imagen:
 
-
-
-
-
-
-
-
-
-
-
-
+![Jenkins_9](Images/Screenshot_9.png)
 
 
 
