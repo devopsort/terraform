@@ -103,7 +103,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - [.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars)
 
 
-**La infraestructura contsa de tres ambientes conformados por:**
+**La infraestructura consta de tres ambientes conformados por:**
 
 - Un VPC con diferenets SubNet para los ambientes:
   - SubNet infraestructura: una zona de disponibilidad.
@@ -192,6 +192,10 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 
 # CI/CD:computer:
+
+**El siguiente diagrama es como esta constituido el CI/CD**:
+![CI/CD](Images/ci_cd.jpeg)
+
 
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
