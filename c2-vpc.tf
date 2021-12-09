@@ -43,15 +43,6 @@ resource "aws_route_table_association" "vpc-obligatorio-frontend-route-table-ass
 }
 
 
-/*
-# Resource-6: Associate the Route Table with the Subnet a
-resource "aws_route_table_association" "vpc-obligatorio-frontend-route-table-associate" {
-  for_each = var.subnet_numbers
-    route_table_id = aws_route_table.vpc-obligatorio-public-route-table.id
-    subnet_id      = aws_subnet.vpc-subnets-obl[each.key].id
-}
-
-*/
 
 
 

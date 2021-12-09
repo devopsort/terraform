@@ -23,17 +23,6 @@ resource "aws_eks_cluster" "eks-cluster-obl" {
   ]
 }
 
-/*
-output "endpoint" {
-  value = [aws_eks_cluster.eks-cluster-obl.endpoint]
-}
-
-
-output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.eks-cluster-obl.certificate_authority[0].data
-}
-*/
-
 
 
 #Node Groups
@@ -42,9 +31,7 @@ resource "aws_eks_node_group" "node_group-obl-dev" {
   cluster_name    = aws_eks_cluster.eks-cluster-obl[each.key].name
   node_group_name = each.value.node_group_name
   node_role_arn   = aws_iam_role.eks-node-group-role.arn
-//      subnet_ids      = [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id]
     subnet_ids = each.value.name == "eks-cluster-prod"   ? [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id] : (each.value.name == "eks-cluster-test"   ? [values(aws_subnet.vpc-subnets-obl)[2].id, values(aws_subnet.vpc-subnets-obl)[3].id] : [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id] )
-    //remote_access_security_group_id = each.value.name == "eks-cluster-prod"   ? [aws_security_group.sg-obl-eks-prod.id] : (each.value.name == "eks-cluster-test"   ? [aws_security_group.sg-obl-eks-test.id] : [aws_security_group.sg-obl-eks-dev.id] )
   
 
   scaling_config {
@@ -68,30 +55,3 @@ resource "aws_eks_node_group" "node_group-obl-dev" {
     aws_iam_role_policy_attachment.pol-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
-
-#--------------------------------------------------------------------------------
-/*
-resource "kubernetes_namespace" "ns_work" {
-  metadata {
-    annotations = {
-      name = "example-annotation"
-    }
-
-    labels = {
-      mylabel = "label-value"
-    }
-
-    name = "terraform-example-namespace"
-  }
-}
-
-
-resource "aws_ecr_repository" "repo-obl" {
-  name                 = "repo-obl-ms-1"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-*/

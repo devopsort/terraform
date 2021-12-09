@@ -65,3 +65,21 @@ variable "argo-ms-product-repo" {
   description = "URL repo Argo ms-product"
   type        = string
 }
+
+# Variables ms-payments-repo
+variable "argo-ms-payments-repo" {
+  description = "URL repo Argo ms-payment"
+  type        = string
+}
+
+# Variables ms-orders-repo 
+variable "argo-ms-orders-repo" {
+  description = "URL repo Argo ms-orders"
+  type        = string
+}
+
+# Variables ms-shipping-repo
+variable "argo-ms-shipping-repo" {
+  description = "URL repo Argo ms-shipping"
+  type        = string
+}

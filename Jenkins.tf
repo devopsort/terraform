@@ -34,20 +34,36 @@ resource "aws_instance" "JenkinsDockerTF" {
     source      = "aws/dash_account.yaml"
     destination = "/tmp/dash_account.yaml"
   }
+  provisioner "file" {
+    source      = "aws/script_deploy.sh"
+    destination = "/tmp/script_deploy.sh"
+  }  
+  provisioner "file" {
+    source      = "private-key/id_rsa"
+    destination = "/tmp/id_rsa"
+  }  
+  provisioner "file" {
+    source      = "private-key/id_rsa.pub"
+    destination = "/tmp/id_rsa.pub"
+  }  
 
   # Ejecutamos los comandos para instalar las tools
   provisioner "remote-exec" {
     inline = [
       "sleep 60",
+      "cp /tmp/script_deploy.sh /home/ec2-user",
+      "chmod +x /home/ec2-user/script_deploy.sh",
       "curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl",
       "chmod +x ./kubectl",
       "mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin",
       "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc",
       "kubectl version --short --client",
+      "sudo mkdir /root/.aws",
+      "sudo cp /tmp/config /root/.aws/",
+      "sudo cp /tmp/credentials /root/.aws/",
       "mkdir ~/.aws",
       "mv /tmp/config ~/.aws",
       "mv /tmp/credentials ~/.aws",
-      "aws ec2 describe-instances",
       "sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64", #ArgoCDInstall
       "sudo chmod +x /usr/local/bin/argocd",
       "sudo yum install -y jq",
@@ -58,11 +74,11 @@ resource "aws_instance" "JenkinsDockerTF" {
     ]
   }
 
-/*
-  # Ejecutamos los comandos para instalar los deployment en cada cluster
+
   provisioner "remote-exec" {
     inline = [
       "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-dev",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml", #Para crear el IngressConroler
       "kubectl create namespace argocd",
       "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
       "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
@@ -71,7 +87,7 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo \"TOKEN DASHBOARD\" >> dev.txt",
       "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> dev.txt",
       "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
-      "sleep 120",
+      "sleep 160",
       "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
       "echo \"ARGO SERVER\" ",
       "echo $ARGOCD_SERVER",
@@ -83,15 +99,23 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo $ARGOCD_SERVER >> dev.txt",
       "echo \"ARGO_PWD\" >> dev.txt",
       "echo $ARGO_PWD >> dev.txt",
-      "cat dev.txt"
+      "cat dev.txt",
+      "argocd app create ms-product --repo ${var.argo-ms-product-repo}    --revision Dev --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-payments --repo ${var.argo-ms-payments-repo}  --revision Dev --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-orders --repo ${var.argo-ms-orders-repo}      --revision Dev --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-shipping --repo ${var.argo-ms-shipping-repo}  --revision Dev --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "kubectl get ingress"
     ]
   }
-*/
+
+
+
 
   # Ejecutamos los comandos para instalar los deployment en cada cluster
   provisioner "remote-exec" {
     inline = [
       "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-test",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml", #Para crear el IngressConroler
       "kubectl create namespace argocd",
       "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
       "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
@@ -100,7 +124,7 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo \"TOKEN DASHBOARD\" >> test.txt",
       "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> test.txt",
       "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
-      "sleep 120",
+      "sleep 160",
       "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
       "echo \"ARGO SERVER\" ",
       "echo $ARGOCD_SERVER",
@@ -109,20 +133,24 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo $ARGO_PWD",
       "argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure",
       "echo \"ARGOCD_SERVER\" >> test.txt",
-      "echo $ARGOCD_SERVER >> detestv.txt",
+      "echo $ARGOCD_SERVER >> test.txt",
       "echo \"ARGO_PWD\" >> test.txt",
       "echo $ARGO_PWD >> test.txt",
       "cat test.txt",
-      "argocd app create ms-product --repo ${var.argo-ms-product-repo} --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
-      "argocd app sync ms-product"
+      "argocd app create ms-product --repo ${var.argo-ms-product-repo}    --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-payments --repo ${var.argo-ms-payments-repo}  --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-orders --repo ${var.argo-ms-orders-repo}      --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-shipping --repo ${var.argo-ms-shipping-repo}  --revision Test --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "kubectl get ingress"
     ]
   }
 
-  /*
-  # Ejecutamos los comandos para instalar los deployment en cada cluster
+
+# Ejecutamos los comandos para instalar los deployment en cada cluster
   provisioner "remote-exec" {
     inline = [
       "aws eks --region us-east-1 update-kubeconfig --name eks-cluster-prod",
+      "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml", #Para crear el IngressConroler
       "kubectl create namespace argocd",
       "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
       "kubectl apply -n kube-system -f /tmp/dash_account.yaml ",
@@ -131,7 +159,7 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo \"TOKEN DASHBOARD\" >> prod.txt",
       "kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}') >> prod.txt",
       "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
-      "sleep 120",
+      "sleep 160",
       "export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`",
       "echo \"ARGO SERVER\" ",
       "echo $ARGOCD_SERVER",
@@ -143,10 +171,15 @@ resource "aws_instance" "JenkinsDockerTF" {
       "echo $ARGOCD_SERVER >> prod.txt",
       "echo \"ARGO_PWD\" >> prod.txt",
       "echo $ARGO_PWD >> prod.txt",
-      "cat test.txt"
+      "cat prod.txt",
+      "argocd app create ms-product --repo ${var.argo-ms-product-repo}    --revision Prod --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-payments --repo ${var.argo-ms-payments-repo}  --revision Prod --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-orders --repo ${var.argo-ms-orders-repo}      --revision Prod --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "argocd app create ms-shipping --repo ${var.argo-ms-shipping-repo}  --revision Prod --path . --dest-namespace default --sync-policy auto --dest-server https://kubernetes.default.svc",
+      "kubectl get ingress"
     ]
   }
-  */
+  
     user_data = <<-EOF
               #!/bin/bash
               sudo yum install -y yum-utils

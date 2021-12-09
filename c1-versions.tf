@@ -6,20 +6,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
-    /*
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = ">= 1.9.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-    }
-    */
   }
 
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-devops-obligatorio3"
+    bucket = "terraform-devops-obligatorio4"
     key    = "terraform/terraform.tfstate"
     region = "us-east-1"
   }
@@ -32,4 +23,3 @@ provider "aws" {
   profile = "default"
 }
 
-//provider "kubernetes" {}
