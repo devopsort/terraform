@@ -193,10 +193,23 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 # CI/CD:computer:
 
-**El siguiente diagrama es como esta constituido el CI/CD**:
+### El siguiente diagrama es como esta constituido el CI/CD:
 ![CI/CD](Images/ci_cd.jpeg)
 
 
+- Al realizarse un push en algun repositorio de los microservicios en la rama Dev comienzan a ejecutarse los Jobs de las github actions que consiste en:
+
+  - Levantar un contenedor ubuntu-latest y sincronizar repositorio
+  - Instalar las dependencias JDK11 necesarias para la ejecucion
+  - Realizar un cache del package con las dependencias de SonarCloud
+  - Realizar un cache del package con las dependencias de Maven
+  - Realizar Build y Analisis
+
+- Simultaneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
+
+  - Realiza un clonado del repositorio git del microservicio
+  - Realiza el build de una imagen docker con el microservicio listo para desplegarse
+  - Pushea la imagen hacia el repositorio ECR de Amazon
 
 ### Configuración del Jenkins
 
