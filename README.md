@@ -30,6 +30,27 @@ Para la creación de la infraestructura cloud se utilizará la herramienta de ap
 Los archivos de el proyecto son manejados en el siguiente repositorio:
 [Repo Terraform](https://github.com/devopsort/terraform.git)  (En la rama "Prod").
 
+**Los archivos están dispuestos de la siguiente forma**:
+  - [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)   -- Configuración de los providers y de S3 para el statefile.
+  - [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)        -- VPC y Subnets
+  - [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)        -- Segurity Groups
+  - [ECR.tf](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)           -- Repositorios ECR
+  - [eksCluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)    -- EKS Cluster y nodegroups
+  - [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)       -- Instancia EC2 para administrar Jenkins, kubectl, awscli, argo_cli
+  - [roles_eks.tf](https://github.com/devopsort/terraform/blob/Prod/roles_eks.tf)     -- Roles para el EKS
+  - [terraform.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) -- Valores de las variables
+  - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)     -- Definición de variables
+
+[**Carpeta aws**:](https://github.com/devopsort/terraform/tree/Prod/aws):open_file_folder:
+  - config             -- Configuración de awscli
+  - credentials        -- Datos de acceso awscli
+  - script_deploy.sh   -- Script para ejecutar los deploy con argocd
+  - dash_account.yaml  -- Cuenta y Roles para EKS dashboard
+
+   [**private-key**:](https://github.com/devopsort/terraform/tree/Prod/private-key)
+   - keyssh-EC2-prueba.pem     -- Par de claves para el acceso a la las intancias EC2
+   - id_rsa y id_rsa.pub       -- Par de claves para el acceso de Jenkins a EC2
+
 
 **Antes de iniciar se debe crearse manualmente un bucket S3 "terraform-devops-obligatorio" para poder almacenar el remote terraform state file.** 
 
@@ -167,27 +188,6 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 ![IAC](Images/IAC.jpeg)
 
-
-**Los archivos están dispuestos de la siguiente forma**:
-  - [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)   -- Configuración de los providers y de S3 para el statefile.
-  - [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)        -- VPC y Subnets
-  - [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)        -- Segurity Groups
-  - [ECR.tf](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)           -- Repositorios ECR
-  - [eksCluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)    -- EKS Cluster y nodegroups
-  - [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)       -- Instancia EC2 para administrar Jenkins, kubectl, awscli, argo_cli
-  - [roles_eks.tf](https://github.com/devopsort/terraform/blob/Prod/roles_eks.tf)     -- Roles para el EKS
-  - [terraform.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) -- Valores de las variables
-  - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)     -- Definición de variables
-
-[**Carpeta aws**:](https://github.com/devopsort/terraform/tree/Prod/aws):open_file_folder:
-  - config             -- Configuración de awscli
-  - credentials        -- Datos de acceso awscli
-  - script_deploy.sh   -- Script para ejecutar los deploy con argocd
-  - dash_account.yaml  -- Cuenta y Roles para EKS dashboard
-
-   [**private-key**:](https://github.com/devopsort/terraform/tree/Prod/private-key)
-   - keyssh-EC2-prueba.pem     -- Par de claves para el acceso a la las intancias EC2
-   - id_rsa y id_rsa.pub       -- Par de claves para el acceso de Jenkins a EC2
 
 
 
