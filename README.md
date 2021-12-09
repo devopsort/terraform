@@ -198,7 +198,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 
 
-### Configuracion del Jenkins
+### Configuración del Jenkins
 
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
