@@ -240,7 +240,9 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 `url:` https://github.com/devopsort/Pipelines.git
 
+Para conectar el EC2 del Jenkins con el git para realizar el push para el repositorio, debemos especificar lo siguiente:
 
+![Jenkins_10](Images/Screenshot_10.png)
 
 
 
