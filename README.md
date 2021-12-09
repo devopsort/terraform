@@ -1,31 +1,31 @@
 
-# Obligatorio Certificacion DevOps :rocket:
+# Obligatorio Certificación DevOps :rocket:
 
 Integrantes del equipo: [Jorge González  ](https://github.com/jorgon183)[, Aroldo Navarro  ](https://github.com/aroldonq)[, Federico Mastrángelo](https://github.com/2matra2/)
 
-## Implementacion modelo DevOps:bulb:
+## Implementación modelo DevOps:bulb:
 
 Que es DevOps:interrobang:
 
-DevOps en escencia son un conjunto de metodologias y practicas que agrupan el desarrollo
-de software y  la operaciones TI, destinadas a agilizar el ciclo de vida del desarrollo de 
-software proporcionando una alta calidad en la entrega continua del mismo. DevOps busca
-la entrega de funcionalidades al usuario lo mas rapido posible sin sacrificar la calidad del 
+DevOps en escencia son un conjunto de metodologías y prácticas que agrupan el desarrollo
+de software y la operaciones TI, destinadas a agilizar el ciclo de vida del desarrollo de 
+software proporcionando una alta calidad en la entrega contínua del mismo. DevOps busca
+la entrega de funcionalidades al usuario lo mas rápido posible sin sacrificar la calidad del 
 producto.
 
 
 
 
-**La implementacion de este obligatorio consta de 3 Puntos clave:**
+**La implementación de este obligatorio consta de 3 Puntos clave:**
 
-- **La utilizacion de un repositorio para versionado y gestion de codigo.**
-- **La creacion de la Infraestructura Como Codigo.**
-- **La implementacion de un canal CI/CD.**
+- **La utilización de un repositorio para versionado y gestión de codigo.**
+- **La creación de la Infraestructura Como Código.**
+- **La implementación de un canal CI/CD.**
 
 
 ## IaC:computer:
 
-Para la creacion de la infraestructura cloud se utilizara la herramienta de aprovisionamiento de infraestructura *Terraform*, junto con el proveedor **Amazon Web Services** en el cual se desplegarán clusters de *Kubernetes* utilizando el servicio **EKS** (Elastic Kubernetes Service)
+Para la creación de la infraestructura cloud se utilizará la herramienta de aprovisionamiento de infraestructura *Terraform*, junto con el proveedor **Amazon Web Services** en el cual se desplegarán clusters de *Kubernetes* utilizando el servicio **EKS** (Elastic Kubernetes Service)
 
 Los archivos de el proyecto son manejados en el siguiente repositorio:
 [Repo Terraform](https://github.com/devopsort/terraform.git)  (En la rama "Prod").
@@ -65,7 +65,7 @@ provider "aws" {
   profile = "default"
 }
 ```
-- **El Codigo puede encontrarse en**: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
+- **El Código puede encontrarse en**: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
 
 
 **- Debe crearse un par de claves ssh, descargar el pem y colocarlo en la carpeta "private-key", configurar el mismo en el archivo de variables y terraform.tfvars.**
@@ -105,8 +105,8 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 **La infraestructura consta de tres ambientes conformados por:**
 
-- Un VPC con diferenets SubNet para los ambientes:
-  - SubNet infraestructura: una zona de disponibilidad.
+- Un VPC con diferentes SubNet para los ambientes:
+  - SubNet Infraestructura: una zona de disponibilidad.
   - SubNet Developer dos zonas a y b
   - SubNet Testing dos zonas a y b 
   - SubNet Prod cuatro zonas a, b, c y d.
@@ -115,7 +115,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
    
    ![SUBNETS](Images/subnets.jpeg)
 
-  **El Codigo se puede encontrar en**: [vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
+  **El Código se puede encontrar en**: [vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
 
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
@@ -125,7 +125,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   ![SG](Images/sg.jpeg)
 
 
-   **El Codigo puede encontrase en**: [SecurityGroups.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
+   **El Código puede encontrase en**: [SecurityGroups.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
 
 - **Cada ambiente consta de un cluster de EKS**:
   - eks-cluster-dev 
@@ -144,14 +144,14 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 
 - Una Instancia EC2 "JenkinsDockerTF" con el SecurityGroup **"sg-obl-infra"** y la SubNet **"Subnet Infra"**
-  - Esta instancia cumplira la funcion de administrar Jenkins, kubectl, aws_cli y argo_cli.
+  - Esta instancia cumplira la función de administrar Jenkins, kubectl, aws_cli y argo_cli.
   - Se le instalaran todas las herramientas necesarias mediante remote-exec
   
   ![EC2 JENKINS](Images/JenkinsDockerTF.jpeg)
   
   
   
-    **El Codigo puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
+    **El Código puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
   
  
 
@@ -159,7 +159,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 ![ECR](Images/ecr.jpeg)
 
-   **- El Codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+   **- El Código puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
 
 
 **El siguiente diagrama es como esta constituida la infrastructura**:
@@ -168,7 +168,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ![IAC](Images/IAC.jpeg)
 
 
-**Los archivos estan dispuestos de la siguiente forma**:
+**Los archivos están dispuestos de la siguiente forma**:
   - [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)   -- Configuración de los providers y de S3 para el statefile.
   - [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)        -- VPC y Subnets
   - [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)        -- Segurity Groups
@@ -177,10 +177,10 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)       -- Instancia EC2 para administrar Jenkins, kubectl, awscli, argo_cli
   - [roles_eks.tf](https://github.com/devopsort/terraform/blob/Prod/roles_eks.tf)     -- Roles para el EKS
   - [terraform.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) -- Valores de las variables
-  - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)     -- Definicion de variables
+  - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)     -- Definición de variables
 
 [**Carpeta aws**:](https://github.com/devopsort/terraform/tree/Prod/aws):open_file_folder:
-  - config             -- Configuracion de awscli
+  - config             -- Configuración de awscli
   - credentials        -- Datos de acceso awscli
   - script_deploy.sh   -- Script para ejecutar los deploy con argocd
   - dash_account.yaml  -- Cuenta y Roles para EKS dashboard
@@ -197,6 +197,9 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ![CI/CD](Images/ci_cd.jpeg)
 
 
+
+### Configuracion del Jenkins
+
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
 ![Jenkins_0](Images/Screenshot_0.png)
@@ -206,7 +209,7 @@ Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proce
 ![Jenkins_1](Images/Screenshot_1.png)
 
 
-Luego procedemos a la instalacion de las dependencias iniciales que nos especifica el Jenkins por defecto y a la configuración del usuario `Admininistrador` que se va a usar, ver imagen:
+Luego procedemos a la instalacion de las dependencias iniciales que nos específica el Jenkins por defecto y a la configuración del usuario `Admininistrador` que se va a usar, ver imagen:
 
 ![Jenkins_2](Images/Screenshot_2.png)
 ![Jenkins_3](Images/Screenshot_3.png)
@@ -227,7 +230,7 @@ Además guardamos en un archivo variable el repo y la rama de la cual se realiza
 
 ![Jenkins_6](Images/Screenshot_6.png)
 
-Especificacion del jobs **OBLIGATORIO**:
+Especificación del jobs **OBLIGATORIO**:
 
 ![Jenkins_8](Images/Screenshot_8.png)
 
