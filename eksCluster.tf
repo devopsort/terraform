@@ -4,12 +4,9 @@ resource "aws_eks_cluster" "eks-cluster-obl" {
   role_arn = aws_iam_role.eks-cluster-role.arn
 
   for_each = var.EKS_Cluster
-  //count = length(var.EKS_Cluster)
     vpc_config {
-      //subnet_ids      = [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id]
       subnet_ids = each.value.name == "eks-cluster-prod"   ? [values(aws_subnet.vpc-subnets-obl)[4].id, values(aws_subnet.vpc-subnets-obl)[5].id, values(aws_subnet.vpc-subnets-obl)[6].id, values(aws_subnet.vpc-subnets-obl)[7].id] : (each.value.name == "eks-cluster-test"   ? [values(aws_subnet.vpc-subnets-obl)[2].id, values(aws_subnet.vpc-subnets-obl)[3].id] : [values(aws_subnet.vpc-subnets-obl)[0].id, values(aws_subnet.vpc-subnets-obl)[1].id] )
       security_group_ids = each.value.name == "eks-cluster-prod"   ? [aws_security_group.sg-obl-eks-prod.id] : (each.value.name == "eks-cluster-test"   ? [aws_security_group.sg-obl-eks-test.id] : [aws_security_group.sg-obl-eks-dev.id] )
-      //security_group_ids = [aws_security_group.sg-obl-eks-dev.id]
       endpoint_private_access   = true
       endpoint_public_access    = false
     }
