@@ -105,68 +105,10 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - SubNet Testing dos zonas a y b 
   - SubNet Prod cuatro zonas a, b, c y d.
 
-```terraform
-# Resources Block -c2-vpc.tf
-# Resource-1: Create VPC
-resource "aws_vpc" "vpc-obligatorio" {
-  cidr_block = var.VPC_cidr_block //"10.0.0.0/16"
-  tags = {
-    "Name" = "vpc-obligatorio"
-  }
-}
 
 
-resource "aws_subnet" "vpc-subnets-obl" {
-  vpc_id            = aws_vpc.vpc-obligatorio.id
-  for_each = var.subnet_data
-    availability_zone = each.value.availability_zone
-    map_public_ip_on_launch = true
-    cidr_block        = each.value.cidr_block
-    tags = each.value.tags
-}
+  **El Codigo se puede encontrar en**: [vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
 
-
-# Resource-3: Internet Gateway
-resource "aws_internet_gateway" "vpc-obligatorio-igw" {
-  vpc_id = aws_vpc.vpc-obligatorio.id
-}
-
-# Resource-4: Create Route Table
-resource "aws_route_table" "vpc-obligatorio-public-route-table" {
-  vpc_id = aws_vpc.vpc-obligatorio.id
-}
-
-# Resource-5: Create Route in Route Table for Internet Access
-resource "aws_route" "vpc-obligatorio-public-route" {
-  route_table_id         = aws_route_table.vpc-obligatorio-public-route-table.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.vpc-obligatorio-igw.id
-}
-
-# Resource-6: Associate the Route Table with the Subnet a
-resource "aws_route_table_association" "vpc-obligatorio-frontend-route-table-associate" {
-  for_each = var.subnet_data
-    route_table_id = aws_route_table.vpc-obligatorio-public-route-table.id
-    subnet_id      = aws_subnet.vpc-subnets-obl[each.key].id
-    
-}
-```
-
-```terraform
-# Variables VPC -terraform.tfvars
-VPC_cidr_block = "10.0.0.0/16"
-
-subnet_data = {
-    S0-Sub_dev-a = {
-      availability_zone = "us-east-1a"
-      cidr_block = "10.0.10.0/24"
-      tags = {
-        Name = "Subnet Dev a"
-        terraform   = "true"
-      }
-    },
-    ....
-```
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
     - En las subnet de los ambientes se les permiten todos los puertos desde dentro de la infraestructura, desde fuera por internet solo 80 y 443, para publicar los         servicios.
@@ -175,6 +117,8 @@ subnet_data = {
 ![SGDEV](Images/sgdev.jpeg)![SGDEV](Images/sgprod.jpeg)![SGDEV](Images/sgtest.jpeg)![SGDEV](Images/sginfra.jpeg)
 
 
+
+   **El Codigo puede encontrase en**: [SecurityGroups.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
 
 - **Cada ambiente consta de un cluster de EKS**:
   - eks-cluster-dev 
