@@ -222,6 +222,12 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   
   :heavy_check_mark:**El yaml base del microservicio *orders* a modo de ejemplo**: [ yaml_base](https://github.com/devopsort/argocd_orders-service-example/blob/Prod/deployment.yml_ORIGINAL)
 
+Una vez subida la imagen del microservicio a ECR y el nuevo deployment yaml file en el repo argocd correspondiente, Argocd se encarga:
+
+  - Ir en busca de cambios al repositorio "argocd_("microservicio")"
+  - Si detecta un cambio, sincroniza y obtiene nuevos yaml files
+  - Realiza deploy/update con los cambios pertinentes hacia Kubernetes
+
 
 ## Configuración del Jenkins
 
