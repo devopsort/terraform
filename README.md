@@ -227,6 +227,8 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Ir en busca de cambios al repositorio "argocd_("microservicio")"
   - Si detecta un cambio, sincroniza y obtiene nuevos yaml files
   - Realiza deploy/update con los cambios pertinentes hacia Kubernetes
+  
+  **Repositorios yaml files**: [OrdersService ](https://github.com/devopsort/argocd_orders-service-example) [PaymentsService ](https://github.com/devopsort/argocd_payments-service-example) [Shipping_Service](https://github.com/devopsort/argocd_shipping-service-example) [ProductsService](https://github.com/devopsort/argocd_products-service-example)
 
 
 ## Configuración del Jenkins
@@ -284,9 +286,22 @@ Para conectar el EC2 del Jenkins con el git para realizar el push para el reposi
 
 ## EKS & Kubernetes
 
-### El siguiente diagrama es como está constituido  
+### El siguiente diagrama es como está constituido cada cluster: 
 
 ![Kubernetes](Images/kube.jpeg)
+
+Mediante el Ingress Nginx se accede a los servicios de la plataforma, estan declaradas las rules para filtrar cada ruta.
+de cada servicio.
+
+- Cada microservicio cuenta con:
+    - Service, cada servicio permite llegar a los endpoint, balanceando el trafico entre la cantida de instancias configuradas. Los mismos son de tipo ClusterIp y no quedan expuestos.
+    - Deployment, configuraciones del aplicativo, definiciones de consumo y escalado del mismo, así como la imagen base.
+    - Replica Set, generado por cada deployment, permite escalar manualmnete o mediante HPA.
+    - ConfigMap, se crea un configmap para especificar las variables de entorno requerida por los diferentes microservicios para conectar entre si.
+      En estos links se utilizan los nombres de los services, de manera que el consumo entre los microservicios sea interno y no mediante el ingress.
+      
+
+
 
 
 ## Informe de SonarCloud
