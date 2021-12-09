@@ -205,11 +205,17 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Realizar un cache del package con las dependencias de Maven
   - Realizar Build y Analisis
 
+  Aqui se puede encontrar a modo de ejemplo el workflow del microservicio orders:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
+
+
 - Simultaneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
 
   - Realiza un clonado del repositorio git del microservicio
   - Realiza el build de una imagen docker con el microservicio listo para desplegarse
   - Pushea la imagen hacia el repositorio ECR de Amazon
+
+  El pipeline correspondiente al jenkins puede encontrarse en:[ Pipeline](https://github.com/devopsort/Pipelines/blob/main/Jenkinsfile-Obligatorio)
+
 
 ### Configuración del Jenkins
 
