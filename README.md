@@ -64,9 +64,9 @@ provider "aws" {
   region  = var.aws_region   //"us-east-1"
   profile = "default"
 }
-
-//provider "kubernetes" {}
 ```
+El codigo puede encontrarse en: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
+
 
 **- Debe crearse un par de claves ssh, descargar el pem y colocarlo en la carpeta "private-key", configurar el mismo en el archivo de variables y terraform.tfvars.**
 
@@ -96,6 +96,12 @@ aws_region = "us-east-1"
 terraform-key = "keyssh-EC2-prueba"
 Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ````
+**El Codigo puede encontrarse en**:
+
+[variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)
+
+[.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars)
+
 
 **La infraestructura contsa de tres ambientes conformados por:**
 
