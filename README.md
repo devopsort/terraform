@@ -124,7 +124,8 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - [.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars)
 
 
-**La infraestructura consta de tres ambientes conformados por:**
+
+### La infraestructura consta de tres ambientes conformados por:
 
 - Un VPC con diferentes SubNet para los ambientes:
   - SubNet Infraestructura: una zona de disponibilidad.
@@ -148,7 +149,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
    **El Código puede encontrase en**: [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
 
-- **Cada ambiente consta de un cluster de EKS**:
+- **Clusters EKS, uno para cada ambiente**:
   - eks-cluster-dev 
   - eks-cluster-test
   - eks-cluster-prod
