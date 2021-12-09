@@ -23,7 +23,7 @@ producto.
 - **La implementación de un canal CI/CD.**:ballot_box_with_check:
 
 
-## IaC:computer:
+# IaC:computer:
 
 Para la creación de la infraestructura cloud se utilizará la herramienta de aprovisionamiento de infraestructura *Terraform*, junto con el proveedor **Amazon Web Services** en el cual se desplegarán clusters de *Kubernetes* utilizando el servicio **EKS** (Elastic Kubernetes Service)
 
@@ -282,5 +282,5 @@ Para conectar el EC2 del Jenkins con el git para realizar el push para el reposi
 ![Jenkins_10](Images/Screenshot_10.png)
 
 
-# EKS & Kubernetes
+## EKS & Kubernetes
 
