@@ -205,7 +205,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Realizar un cache del package con las dependencias de Maven
   - Realizar Build y Analisis
 
-  Aqui se puede encontrar a modo de ejemplo el workflow del microservicio orders:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
+  **Aqui se puede encontrar a modo de ejemplo el workflow del microservicio *orders***:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
 
 
 - Simultaneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
@@ -213,8 +213,13 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Realiza un clonado del repositorio git del microservicio
   - Realiza el build de una imagen docker con el microservicio listo para desplegarse
   - Pushea la imagen hacia el repositorio ECR de Amazon
+  - Realiza un pull del un yaml base(*kind deployment*) dentro del repositorio argocd correspondiente al microservicio
+  - Edita el yaml agregando el link hacia la imagen del microservicio almacenado en ECR
+  - Pushea el yaml editado bajo el nombre "deployment.yml" hacia el repositorio argocd correspondiente
 
-  El pipeline correspondiente al jenkins puede encontrarse en:[ Pipeline](https://github.com/devopsort/Pipelines/blob/main/Jenkinsfile-Obligatorio)
+  **El pipeline correspondiente al jenkins puede encontrarse en**:[ Pipeline](https://github.com/devopsort/Pipelines/blob/main/Jenkinsfile-Obligatorio)
+  
+  **El yaml base del microservicio *orders* a modo de ejemplo**: [ yaml_base](https://github.com/devopsort/argocd_orders-service-example/blob/Prod/deployment.yml_ORIGINAL)
 
 
 ### Configuración del Jenkins
