@@ -284,3 +284,7 @@ Para conectar el EC2 del Jenkins con el git para realizar el push para el reposi
 
 ## EKS & Kubernetes
 
+### El siguiente diagrama es como está constituido  
+
+![Kubernetes](Images/kubernetes.jpeg)
+
