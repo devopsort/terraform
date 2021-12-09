@@ -18,16 +18,16 @@ producto.
 
 **La implementación de este obligatorio consta de 3 Puntos clave:**
 
-- **La utilización de un repositorio para versionado y gestión de codigo.**:heavy_check_mark:
-- **La creación de la Infraestructura Como Código.**:heavy_check_mark:
-- **La implementación de un canal CI/CD.**:heavy_check_mark:
+- **La utilización de un repositorio para versionado y gestión de codigo.**:ballot_box_with_check:
+- **La creación de la Infraestructura Como Código.**:ballot_box_with_check:
+- **La implementación de un canal CI/CD.**:ballot_box_with_check:
 
 
 ## IaC:computer:
 
 Para la creación de la infraestructura cloud se utilizará la herramienta de aprovisionamiento de infraestructura *Terraform*, junto con el proveedor **Amazon Web Services** en el cual se desplegarán clusters de *Kubernetes* utilizando el servicio **EKS** (Elastic Kubernetes Service)
 
-Los archivos de el proyecto son manejados en el siguiente repositorio:
+:heavy_check_mark:Los archivos de el proyecto son manejados en el siguiente repositorio:
 [Repo Terraform](https://github.com/devopsort/terraform.git)  (En la rama "Prod").
 
 **Los archivos están dispuestos de la siguiente forma**:
@@ -86,7 +86,7 @@ provider "aws" {
   profile = "default"
 }
 ```
-- **El Código puede encontrarse en**: [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
+:heavy_check_mark:**El Código puede encontrarse en**: [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
 
 
 **- Debe crearse un par de claves ssh, descargar el pem y colocarlo en la carpeta "private-key", configurar el mismo en el archivo de variables y terraform.tfvars.**
@@ -117,7 +117,7 @@ aws_region = "us-east-1"
 terraform-key = "keyssh-EC2-prueba"
 Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ````
-**El Codigo puede encontrarse en**:
+:heavy_check_mark:**El Codigo puede encontrarse en**:
 
   - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)
 
@@ -137,7 +137,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
    
    ![SUBNETS](Images/subnets.jpeg)
 
-  **El Código se puede encontrar en**: [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
+  :heavy_check_mark:**El Código se puede encontrar en**: [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
 
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
@@ -147,7 +147,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   ![SG](Images/sg.jpeg)
 
 
-   **El Código puede encontrase en**: [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
+   :heavy_check_mark:**El Código puede encontrase en**: [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
 
 - **Clusters EKS, uno para cada ambiente**:
   - eks-cluster-dev 
@@ -156,11 +156,11 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
     
   ![EKS CLUSTER](Images/EKS.jpeg)
   
-  Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.
+  Los mismos estan parametrizados en el archivo **variables.tfvars** y **eksCluster.tf** asi como los recursos a cada uno.
 
-  **tfvars**:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
+  :heavy_check_mark:**tfvars**:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
 
-  **ekscluster**:[ ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
+  :heavy_check_mark:**ekscluster**:[ ekscluster.tf](https://github.com/devopsort/terraform/blob/Prod/eksCluster.tf)
 
 
 
@@ -173,7 +173,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   
   
   
-    **El Código puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
+    :heavy_check_mark:**El Código puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
   
  
 
@@ -181,7 +181,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 ![ECR](Images/ecr.jpeg)
 
-   **- El Código puede encontrarse en**: [ECR.tf](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+   :heavy_check_mark:**El Código puede encontrarse en**: [ECR.tf](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
 
 
 **El siguiente diagrama es como esta constituida la infrastructura**:
@@ -206,7 +206,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Realizar un cache del package con las dependencias de Maven
   - Realizar Build y Análisis
 
-  **Aquí se puede encontrar a modo de ejemplo el workflow del microservicio *orders***:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
+  :heavy_check_mark:**Aquí se puede encontrar a modo de ejemplo el workflow del microservicio *orders***:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
 
 
 - Simultáneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
@@ -218,9 +218,9 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - Edita el yaml agregando el link hacia la imagen del microservicio almacenado en ECR
   - Pushea el yaml editado bajo el nombre "deployment.yml" hacia el repositorio argocd correspondiente
 
-  **El pipeline correspondiente al jenkins puede encontrarse en**:[ Pipeline](https://github.com/devopsort/Pipelines/blob/main/Jenkinsfile-Obligatorio)
+  :heavy_check_mark:**El pipeline correspondiente al jenkins puede encontrarse en**:[ Pipeline](https://github.com/devopsort/Pipelines/blob/main/Jenkinsfile-Obligatorio)
   
-  **El yaml base del microservicio *orders* a modo de ejemplo**: [ yaml_base](https://github.com/devopsort/argocd_orders-service-example/blob/Prod/deployment.yml_ORIGINAL)
+  :heavy_check_mark:**El yaml base del microservicio *orders* a modo de ejemplo**: [ yaml_base](https://github.com/devopsort/argocd_orders-service-example/blob/Prod/deployment.yml_ORIGINAL)
 
 
 ## Configuración del Jenkins
@@ -269,7 +269,7 @@ Por ultimo se debe especificar en el las configuraciones del git la url del jenk
 
 **Repositorio donde especificamos el archivo Jenkinsfile-Obligatorio:** 
 
- - [JenkinsFile](https://github.com/devopsort/Pipelines.git)
+ :heavy_check_mark: [JenkinsFile](https://github.com/devopsort/Pipelines.git)
 
 Para conectar el EC2 del Jenkins con el git para realizar el push para el repositorio, debemos especificar lo siguiente:
 
