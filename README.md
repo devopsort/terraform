@@ -172,7 +172,7 @@ subnet_data = {
     - En las subnet de los ambientes se les permiten todos los puertos desde dentro de la infraestructura, desde fuera por internet solo 80 y 443, para publicar los         servicios.
 
 
-![Github logo](terraform/Images/SG DEVELOPER.png)
+![SGDEV](Images/sgdev.jpeg)![SGDEV](Images/sgprod.jpeg)![SGDEV](Images/sgtest.jpeg)![SGDEV](Images/sginfra.jpeg)
 
 
 
@@ -181,8 +181,9 @@ subnet_data = {
   - eks-cluster-test
   - eks-cluster-prod
     
-    
-Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.
+  ![EKS CLUSTER](Images/EKS.jpeg)
+  
+  Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.tf asi como los recursos a cada uno.
 
   **tfvars**:[ .tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) 
 
@@ -190,15 +191,16 @@ Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.t
 
 
 
-![EKS CLUSTER](Images/EKS.jpeg)
-
-
 
 - Una Instancia EC2 "JenkinsDockerTF" con el SecurityGroup **"sg-obl-infra"** y la SubNet **"Subnet Infra"**
   - Esta instancia cumplira la funcion de administrar Jenkins, kubectl, aws_cli y argo_cli.
   - Se le instalaran todas las herramientas necesarias mediante remote-exec
   
-  **El Codigo puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
+  ![EC2 JENKINS](Images/JenkinsDockerTF.jpeg)
+  
+  
+  
+    **El Codigo puede encontrarse en**: [Jenkins.tf](https://github.com/devopsort/terraform/blob/Prod/Jenkins.tf)
   
  
 
@@ -206,7 +208,7 @@ Los mismos estan parametrizados en el archivo de variables.tfvars y eksCluster.t
 
 ![ECR](Images/ecr.jpeg)
 
-**El codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+**El Codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
 
 
 # CI/CD:computer:
