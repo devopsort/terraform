@@ -36,7 +36,7 @@ Los archivos de el proyecto son manejados en el siguiente repositorio:
 ![Bucket S3](Images/Bucket.png)
 
 
-**- Se declaran los providers a utilizar para crear la infraestructura junto con el bucket s3**
+- **Se declaran los providers a utilizar para crear la infraestructura junto con el bucket s3**
 
 ```terraform
 # Terraform Block -c1-versions.tf
@@ -65,7 +65,7 @@ provider "aws" {
   profile = "default"
 }
 ```
-El codigo puede encontrarse en: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
+- **El Codigo puede encontrarse en**: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
 
 
 **- Debe crearse un par de claves ssh, descargar el pem y colocarlo en la carpeta "private-key", configurar el mismo en el archivo de variables y terraform.tfvars.**
@@ -98,9 +98,9 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ````
 **El Codigo puede encontrarse en**:
 
-[variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)
+  - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)
 
-[.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars)
+  - [.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars)
 
 
 **La infraestructura contsa de tres ambientes conformados por:**
