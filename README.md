@@ -3,7 +3,7 @@
 
 Integrantes del equipo: [Jorge González  ](https://github.com/jorgon183)[, Aroldo Navarro  ](https://github.com/aroldonq)[, Federico Mastrángelo](https://github.com/2matra2/)
 
-## Implementacion modelo DevOps
+## Implementacion modelo DevOps:bulb:
 
 Que es DevOps:interrobang:
 
@@ -179,7 +179,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - [terraform.tfvars](https://github.com/devopsort/terraform/blob/Prod/terraform.tfvars) -- Valores de las variables
   - [variables.tf](https://github.com/devopsort/terraform/blob/Prod/variables.tf)     -- Definicion de variables
 
-[**Carpeta aws**:](https://github.com/devopsort/terraform/tree/Prod/aws)
+[**Carpeta aws**:](https://github.com/devopsort/terraform/tree/Prod/aws):open_file_folder:
   - config             -- Configuracion de awscli
   - credentials        -- Datos de acceso awscli
   - script_deploy.sh   -- Script para ejecutar los deploy con argocd
