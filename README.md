@@ -105,7 +105,9 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   - SubNet Testing dos zonas a y b 
   - SubNet Prod cuatro zonas a, b, c y d.
 
-
+   ![VPC](Images/vpc.jpeg)
+   
+   ![SUBNETS](Images/subnets.jpeg)
 
   **El Codigo se puede encontrar en**: [vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
 
@@ -114,8 +116,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
     - En las subnet de los ambientes se les permiten todos los puertos desde dentro de la infraestructura, desde fuera por internet solo 80 y 443, para publicar los         servicios.
 
 
-![SGDEV](Images/sgdev.jpeg)![SGDEV](Images/sgprod.jpeg)![SGDEV](Images/sgtest.jpeg)![SGDEV](Images/sginfra.jpeg)
-
+  ![SG](Images/sg.jpeg)
 
 
    **El Codigo puede encontrase en**: [SecurityGroups.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
