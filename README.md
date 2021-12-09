@@ -18,9 +18,9 @@ producto.
 
 **La implementación de este obligatorio consta de 3 Puntos clave:**
 
-- **La utilización de un repositorio para versionado y gestión de codigo.**
-- **La creación de la Infraestructura Como Código.**
-- **La implementación de un canal CI/CD.**
+- **La utilización de un repositorio para versionado y gestión de codigo.**:heavy_check_mark:
+- **La creación de la Infraestructura Como Código.**:heavy_check_mark:
+- **La implementación de un canal CI/CD.**:heavy_check_mark:
 
 
 ## IaC:computer:
