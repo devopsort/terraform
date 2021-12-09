@@ -5,7 +5,7 @@ Integrantes del equipo: [Jorge González  ](https://github.com/jorgon183)[, Arol
 
 ## Implementación modelo DevOps:bulb:
 
-Que es DevOps:interrobang:
+### Que es DevOps:interrobang:
 
 DevOps en escencia son un conjunto de metodologías y prácticas que agrupan el desarrollo
 de software y la operaciones TI, destinadas a agilizar el ciclo de vida del desarrollo de 
@@ -193,22 +193,22 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 # CI/CD:computer:
 
-### El siguiente diagrama es como esta constituido el CI/CD:
+### El siguiente diagrama es como está constituido el CI/CD:
 ![CI/CD](Images/ci_cd.jpeg)
 
 
-- Al realizarse un push en algun repositorio de los microservicios en la rama Dev comienzan a ejecutarse los Jobs de las github actions que consiste en:
+- Al realizarse un push en algun repositorio de los microservicios, comienzan a ejecutarse los Jobs de las github actions que consisten en:
 
   - Levantar un contenedor ubuntu-latest y sincronizar repositorio
-  - Instalar las dependencias JDK11 necesarias para la ejecucion
+  - Instalar las dependencias JDK11 necesarias para la ejecución
   - Realizar un cache del package con las dependencias de SonarCloud
   - Realizar un cache del package con las dependencias de Maven
-  - Realizar Build y Analisis
+  - Realizar Build y Análisis
 
-  **Aqui se puede encontrar a modo de ejemplo el workflow del microservicio *orders***:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
+  **Aquí se puede encontrar a modo de ejemplo el workflow del microservicio *orders***:[ WorkFlow_File](https://github.com/devopsort/orders-service-example/actions/runs/1483697667/workflow)
 
 
-- Simultaneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
+- Simultáneamente mediante un Webhook, Jenkins detecta el push y realiza las siguientes tareas:
 
   - Realiza un clonado del repositorio git del microservicio
   - Realiza el build de una imagen docker con el microservicio listo para desplegarse
@@ -222,7 +222,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   **El yaml base del microservicio *orders* a modo de ejemplo**: [ yaml_base](https://github.com/devopsort/argocd_orders-service-example/blob/Prod/deployment.yml_ORIGINAL)
 
 
-### Configuración del Jenkins
+## Configuración del Jenkins
 
 Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proceder con la configuración del mismo, lo primero es buscar el `initialAdminPassword` que solicita el Jenkins para inicializarlo, ver imagen:
 
@@ -233,12 +233,12 @@ Luego de instalada la Infraestructura nos logueamos al EC2 de Jenkins para proce
 ![Jenkins_1](Images/Screenshot_1.png)
 
 
-Luego procedemos a la instalacion de las dependencias iniciales que nos específica el Jenkins por defecto y a la configuración del usuario `Admininistrador` que se va a usar, ver imagen:
+Luego procedemos a la instalación de las dependencias iniciales que nos específica el Jenkins por defecto y a la configuración del usuario `Admininistrador` que se va a usar, ver imagen:
 
 ![Jenkins_2](Images/Screenshot_2.png)
 ![Jenkins_3](Images/Screenshot_3.png)
 
-Y como bien se muestra en la siguiente imagen, se puede mostrar que la instalación termino exitosamente y que esta operativo y listo para trabajar.
+Y como bien se muestra en la siguiente imagen, se puede mostrar que la instalación terminó exitosamente y que esta operativo y listo para trabajar.
 
 ![Jenkins_4](Images/Screenshot_4.png)
 
