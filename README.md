@@ -86,7 +86,7 @@ provider "aws" {
   profile = "default"
 }
 ```
-- **El Código puede encontrarse en**: [Versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
+- **El Código puede encontrarse en**: [c1-versions.tf](https://github.com/devopsort/terraform/blob/Prod/c1-versions.tf)
 
 
 **- Debe crearse un par de claves ssh, descargar el pem y colocarlo en la carpeta "private-key", configurar el mismo en el archivo de variables y terraform.tfvars.**
@@ -136,7 +136,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
    
    ![SUBNETS](Images/subnets.jpeg)
 
-  **El Código se puede encontrar en**: [vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
+  **El Código se puede encontrar en**: [c2-vpc.tf](https://github.com/devopsort/terraform/blob/Prod/c2-vpc.tf)
 
 - **Segurity groups para cada ambiente.**
     - En la SubNet de infra se permite el acceso por el puerto 22(SSH) y al Jenkins por el 8080.
@@ -146,7 +146,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
   ![SG](Images/sg.jpeg)
 
 
-   **El Código puede encontrase en**: [SecurityGroups.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
+   **El Código puede encontrase en**: [c4-sg.tf](https://github.com/devopsort/terraform/blob/Prod/c4-sg.tf)
 
 - **Cada ambiente consta de un cluster de EKS**:
   - eks-cluster-dev 
@@ -180,7 +180,7 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 ![ECR](Images/ecr.jpeg)
 
-   **- El Código puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+   **- El Código puede encontrarse en**: [ECR.tf](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
 
 
 **El siguiente diagrama es como esta constituida la infrastructura**:
