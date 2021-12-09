@@ -161,6 +161,29 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 ![IAC](Images/IAC.jpeg)
 
 
+**Los archivos estan dispuestos de la siguiente forma**:
+  - c1-versions.tf   -- Configuración de los providers y de S3 para el statefile.
+  - c2-vpc.tf        -- VPC y Subnets
+  - c4-sg.tf         -- Segurity Groups
+  - ECR.tf           -- Repositorios ECR
+  - eksCluster.tf    -- EKS Cluster y nodegroups
+  - Jenkins.tf       -- Instancia EC2 para administrar Jenkins, kubectl, awscli, argo_cli
+  - roles_eks.tf     -- Roles para el EKS
+  - terraform.tfvars -- Valores de las variables
+  - variables.tf     -- Definicion de variables
+
+**Carpetas**:
+  **aws**:
+  - config             -- Configuracion de awscli
+  - credentials        -- Datos de acceso awscli
+  - script_deploy.sh   -- Script para ejecutar los deploy con argocd
+  - dash_account.yaml  -- Cuenta y Roles para EKS dashboard
+
+   **private-key**:
+   - keyssh-EC2-prueba.pem     -- Par de claves para el acceso a la las intancias EC2
+   - id_rsa y id_rsa.pub       -- Par de claves para el acceso de Jenkins a EC2
+
+
 
 # CI/CD:computer:
 
