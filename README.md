@@ -152,7 +152,14 @@ Ec2-ssh-key = "private-key/keyssh-EC2-prueba-insite.pem"
 
 ![ECR](Images/ecr.jpeg)
 
-**El Codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+    **-El Codigo puede encontrarse en**: [ECR](https://github.com/devopsort/terraform/blob/Prod/ECR.tf)
+
+
+**El siguiente diagrama es como esta constituida la infrastructura**:
+
+
+![IAC](Images/IAC.jpeg)
+
 
 
 # CI/CD:computer:
