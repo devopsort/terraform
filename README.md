@@ -52,12 +52,12 @@ Los archivos de el proyecto son manejados en el siguiente repositorio:
    - id_rsa y id_rsa.pub       -- Par de claves para el acceso de Jenkins a EC2
 
 
-**Antes de iniciar se debe crearse manualmente un bucket S3 "terraform-devops-obligatorio" para poder almacenar el remote terraform state file.** 
+**Antes de iniciar se debe crearse manualmente un bucket S3 :bucket: "terraform-devops-obligatorio" para poder almacenar el remote terraform state file.** 
 
 ![Bucket S3](Images/Bucket.png)
 
 
-- **Se declaran los providers a utilizar para crear la infraestructura junto con el bucket s3**
+- **Se declaran los providers a utilizar para crear la infraestructura junto con el bucket s3**:bucket:
 
 ```terraform
 # Terraform Block -c1-versions.tf
